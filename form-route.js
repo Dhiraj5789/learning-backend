@@ -1,8 +1,10 @@
 const http = require("http");
+const fs = require("fs");
 
 const server = http.createServer((req, res) => {
   // Event Listener
   const url = req.url;
+  const method = req.method;
   if (url === "/") {
     res.setHeader("Content-Type", "text/html");
     res.write("<html><head><title>Form Route</title></head><body>");
@@ -11,6 +13,12 @@ const server = http.createServer((req, res) => {
     res.write('<button type="submit">Send</button>');
     res.write("</form>");
     res.write("</body></html>");
+    return res.end();
+  }
+  if (url === "/message" && method === "POST") {
+    fs.writeFileSync("message.txt", "Johnny Test");
+    res.statusCode = 302;
+    res.setHeader("Location", "/");
     return res.end();
   }
   res.setHeader("Content-Type", "text/html");
