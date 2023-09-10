@@ -21,19 +21,18 @@ const server = http.createServer((req, res) => {
       console.log("Chunk: ", chunk);
       body.push(chunk);
     });
-    req.on("end", () => {
+    return req.on("end", () => {
       const parsedBody = Buffer.concat(body).toString();
-      console.log("Input: ", parsedBody);
+      const message = parsedBody.split("=")[1];
+      fs.writeFileSync("message.txt", message);
+      res.statusCode = 302;
+      res.setHeader("Location", "/");
+      return res.end();
     });
-    fs.writeFileSync("message.txt", "Johnny Test");
-    res.statusCode = 302;
-    res.setHeader("Location", "/");
-    return res.end();
   }
   res.setHeader("Content-Type", "text/html");
   res.write("<html><head><title>Form Route</title></head><body>");
   res.write("<h1>Form Route is /</h1>");
-  res.write("</form>");
   res.write("</body></html>");
   res.end();
   // process.exit(); // stops event loop and quits server
