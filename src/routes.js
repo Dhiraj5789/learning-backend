@@ -1,7 +1,6 @@
-const http = require("http");
 const fs = require("fs");
 
-const server = http.createServer((req, res) => {
+function requestHandler(req, res) {
   // Event Listener
   const url = req.url;
   const method = req.method;
@@ -18,7 +17,6 @@ const server = http.createServer((req, res) => {
   if (url === "/message" && method === "POST") {
     const body = [];
     req.on("data", (chunk) => {
-      console.log("Chunk: ", chunk);
       body.push(chunk);
     });
     return req.on("end", () => {
@@ -37,7 +35,6 @@ const server = http.createServer((req, res) => {
   res.write("</body></html>");
   res.end();
   // process.exit(); // stops event loop and quits server
-});
+}
 
-server.listen(3000);
-// event loop keeps on running as long as there are listeners registered
+module.exports = requestHandler;
