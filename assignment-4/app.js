@@ -3,7 +3,7 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
-const users = [];
+const productsController = require("./controllers/users");
 
 app.set("view engine", "pug");
 app.set("views", "views");
@@ -15,15 +15,7 @@ app.get("/", (req, res, next) => {
     docTitle: "My Space",
   });
 });
-app.get("/users", (req, res, next) => {
-  res.render("users", {
-    docTitle: "Users",
-    users,
-  });
-});
-app.post("/add-user", (req, res, next) => {
-  users.push({ name: req.body.userName });
-  res.redirect("/users");
-});
+app.get("/users", productsController.getUsers);
+app.post("/add-user", productsController.postUsers);
 
 app.listen(3000);
